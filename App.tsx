@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import Hero from './components/Hero';
 import InfoSection from './components/InfoSection';
 import RegistrationForm from './components/RegistrationForm';
-import RueckblickCarousel from './components/RueckblickCarousel';
+import RueckblickVideo from './components/RueckblickCollage';
 
 const App: React.FC = () => {
   const formRef = useRef<HTMLDivElement>(null);
@@ -37,7 +37,7 @@ const App: React.FC = () => {
         
         <InfoSection />
         
-          <RueckblickCarousel />
+          <RueckblickVideo />
            <section ref={formRef} className="py-24 px-4 relative overflow-hidden">
              {/* Background glow for form section */}
              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl h-[600px] bg-fuchsia-900/10 rounded-full blur-[100px] -z-10" />
