@@ -2,6 +2,7 @@ import React, { useState, Fragment } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
 import { RegistrationFormData, FormErrors } from '../types';
 import { Check, Loader2, Send } from 'lucide-react';
+import emailjs from 'emailjs-com';
 
 const RegistrationForm: React.FC = () => {
   const roleOptions = [
@@ -43,18 +44,30 @@ const RegistrationForm: React.FC = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const customHandleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
-
     setIsSubmitting(true);
-
-    // Simulate API call
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
+      await emailjs.send(
+        'service_hx1ltyd', // Service ID
+        'template_8vizhwy', // Template ID
+        {
+          vorname: formData.firstName,
+          nachname: formData.lastName,
+          email: formData.email,
+          rolle: formData.role,
+          nachricht: formData.comments,
+          datenschutz: formData.acceptPrivacy ? 'Ja' : 'Nein',
+          verarbeitung: formData.acceptProcessing ? 'Ja' : 'Nein',
+        },
+        'M0koniIxqU7KaRGdN' // <-- Trage hier deinen Public Key ein
+      );
       setIsSuccess(true);
-      console.log("Form Data:", formData);
-    }, 1500);
+    } catch (error) {
+      alert('Fehler beim Senden. Bitte versuche es erneut.');
+    }
+    setIsSubmitting(false);
   };
 
   if (isSuccess) {
@@ -69,7 +82,7 @@ const RegistrationForm: React.FC = () => {
           Alle weiteren Infos erhältst du per E-Mail.
         </p>
         <button 
-          onClick={() => setIsSuccess(false)}
+          onClick={() => window.location.reload()}
           className="text-fuchsia-400 hover:text-fuchsia-300 font-bold uppercase tracking-wider transition-colors border-b border-fuchsia-400/30 hover:border-fuchsia-400"
         >
           Zurück zum Formular
@@ -88,12 +101,14 @@ const RegistrationForm: React.FC = () => {
             <h3 className="text-3xl font-bold text-white mb-2 font-[Rajdhani] uppercase">Jetzt anmelden</h3>
             <p className="text-slate-400">Sichere dir deinen Platz für den Abend. Die Teilnahme ist kostenlos. (Uhrzeit: abends)</p>
           </div>
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={customHandleSubmit} className="space-y-6">
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
               <label className="text-xs font-bold text-fuchsia-300/80 uppercase tracking-wider block">Vorname *</label>
               <input 
                 type="text"
+                name="Vorname"
                 value={formData.firstName}
                 onChange={(e) => setFormData({...formData, firstName: e.target.value})}
                 className={`w-full bg-white/5 border ${errors.firstName ? 'border-red-500/50 focus:border-red-500' : 'border-white/10 focus:border-fuchsia-500'} rounded-lg px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:ring-1 focus:ring-fuchsia-500 transition-all`}
@@ -105,6 +120,7 @@ const RegistrationForm: React.FC = () => {
               <label className="text-xs font-bold text-fuchsia-300/80 uppercase tracking-wider block">Nachname *</label>
               <input 
                 type="text"
+                name="Nachname"
                 value={formData.lastName}
                 onChange={(e) => setFormData({...formData, lastName: e.target.value})}
                 className={`w-full bg-white/5 border ${errors.lastName ? 'border-red-500/50 focus:border-red-500' : 'border-white/10 focus:border-fuchsia-500'} rounded-lg px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:ring-1 focus:ring-fuchsia-500 transition-all`}
@@ -118,6 +134,7 @@ const RegistrationForm: React.FC = () => {
             <label className="text-xs font-bold text-fuchsia-300/80 uppercase tracking-wider block">E-Mail Adresse *</label>
             <input 
               type="email"
+              name="Email"
               value={formData.email}
               onChange={(e) => setFormData({...formData, email: e.target.value})}
               className={`w-full bg-white/5 border ${errors.email ? 'border-red-500/50 focus:border-red-500' : 'border-white/10 focus:border-fuchsia-500'} rounded-lg px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:ring-1 focus:ring-fuchsia-500 transition-all`}
@@ -161,6 +178,7 @@ const RegistrationForm: React.FC = () => {
           <div className="space-y-2">
             <label className="text-xs font-bold text-yellow-300/80 uppercase tracking-wider block">Platz für Rückfragen, Anmerkungen</label>
             <textarea
+              name="Nachricht"
               value={formData.comments}
               onChange={e => setFormData({ ...formData, comments: e.target.value })}
               className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500 transition-all"
@@ -174,6 +192,7 @@ const RegistrationForm: React.FC = () => {
               <input
                 type="checkbox"
                 id="acceptPrivacy"
+                name="Datenschutz"
                 checked={formData.acceptPrivacy}
                 onChange={e => setFormData({ ...formData, acceptPrivacy: e.target.checked })}
                 className="mt-1 accent-yellow-500 focus:ring-2 focus:ring-yellow-400"
@@ -189,6 +208,7 @@ const RegistrationForm: React.FC = () => {
               <input
                 type="checkbox"
                 id="acceptProcessing"
+                name="Verarbeitung"
                 checked={formData.acceptProcessing}
                 onChange={e => setFormData({ ...formData, acceptProcessing: e.target.checked })}
                 className="mt-1 accent-yellow-500 focus:ring-2 focus:ring-yellow-400"
@@ -200,23 +220,23 @@ const RegistrationForm: React.FC = () => {
             {errors.acceptProcessing && <div className="text-xs text-red-400 ml-7">{errors.acceptProcessing}</div>}
           </div>
 
-          <button 
+            <button 
               type="submit" 
               disabled={isSubmitting}
               className="w-full bg-gradient-to-r from-fuchsia-600 to-yellow-500 text-white font-bold text-lg uppercase tracking-wider py-4 rounded-lg hover:from-fuchsia-500 hover:to-yellow-400 hover:scale-[1.01] active:scale-[0.99] transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-6 shadow-lg shadow-fuchsia-900/20"
-          >
+            >
               {isSubmitting ? (
-                  <>
-                      <Loader2 className="w-5 h-5 animate-spin" />
-                      Wird gesendet...
-                  </>
+                <>
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                  Wird gesendet...
+                </>
               ) : (
-                  <>
-                      <Send className="w-5 h-5" />
-                      Kostenlos Anmelden
-                  </>
+                <>
+                  <Send className="w-5 h-5" />
+                  Kostenlos Anmelden
+                </>
               )}
-          </button>
+            </button>
           </form>
         </div>
       </div>
