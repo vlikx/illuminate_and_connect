@@ -32,7 +32,7 @@ const Hero: React.FC<HeroProps> = ({ onScrollToForm }) => {
         </h1>
 
         <p className="text-lg md:text-2xl text-slate-300 max-w-2xl mx-auto font-light leading-relaxed font-sans">
-          Ein Abend (Uhrzeit: abends), der zeigt, was <span className="text-white font-medium border-b border-yellow-500/50">Human Centricity</span> bewegt.
+          Ein Abend, der zeigt, was <span className="text-white font-medium border-b border-yellow-500/50">Human Centricity</span> bewegt.
         </p>
 
         {/* Info Pills */}
