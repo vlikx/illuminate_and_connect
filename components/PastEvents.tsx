@@ -3,20 +3,20 @@ import React, { useState } from 'react';
 import Masonry from 'react-masonry-css';
 
 const images2024 = [
-  'Peter_Munz (11 von 33).jpg',
-  'Peter_Munz (12 von 33).jpg',
-  'Peter_Munz (2 von 8).jpg',
-  'Peter_Munz (21 von 33).jpg',
-  'Peter_Munz (23 von 33).jpg',
-  'Peter_Munz (25 von 33).jpg',
-  'Peter_Munz (26 von 33).jpg',
-  'Peter_Munz (28 von 33).jpg',
-  'Peter_Munz (32 von 33).jpg',
-  'Peter_Munz (33 von 33).jpg',
-  'Peter_Munz (4 von 33).jpg',
-  'Peter_Munz (6 von 33).jpg',
-  'Peter_Munz (7 von 33).jpg',
-  'Peter_Munz (7 von 8).jpg',
+  'Peter_Munz_11_von_33.jpg',
+  'Peter_Munz_12_von_33.jpg',
+  'Peter_Munz_2_von_8.jpg',
+  'Peter_Munz_21_von_33.jpg',
+  'Peter_Munz_23_von_33.jpg',
+  'Peter_Munz_25_von_33.jpg',
+  'Peter_Munz_26_von_33.jpg',
+  'Peter_Munz_28_von_33.jpg',
+  'Peter_Munz_32_von_33.jpg',
+  'Peter_Munz_33_von_33.jpg',
+  'Peter_Munz_4_von_33.jpg',
+  'Peter_Munz_6_von_33.jpg',
+  'Peter_Munz_7_von_33.jpg',
+  'Peter_Munz_7_von_8.jpg',
   'Werkschauabend_AndreasStephan-01.jpg',
   'Werkschauabend_AndreasStephan-02.jpg',
   'Werkschauabend_AndreasStephan-03.jpg',
@@ -50,21 +50,21 @@ const images2025 = [
   '3J7A8427-Verbessert-RR.jpg',
   '3J7A8431-Verbessert-RR.jpg',
   '3J7A8445-Verbessert-RR.jpg',
-  'I&C-4697.jpg',
-  'I&C-4726.jpg',
-  'I&C-4727.jpg',
-  'I&C-4734.jpg',
-  'I&C-4739.jpg',
-  'I&C-4758.jpg',
-  'I&C-4780.jpg',
-  'I&C-4811.jpg',
-  'I&C-4818.jpg',
-  'I&C-4860.jpg',
-  'I&C-4883.jpg',
-  'I&C-4885.jpg',
-  'I&C-4906.jpg',
-  'I&C-4917.jpg',
-  'I&C-4930.jpg',
+  'IandC-4697.jpg',
+  'IandC-4726.jpg',
+  'IandC-4727.jpg',
+  'IandC-4734.jpg',
+  'IandC-4739.jpg',
+  'IandC-4758.jpg',
+  'IandC-4780.jpg',
+  'IandC-4811.jpg',
+  'IandC-4818.jpg',
+  'IandC-4860.jpg',
+  'IandC-4883.jpg',
+  'IandC-4885.jpg',
+  'IandC-4906.jpg',
+  'IandC-4917.jpg',
+  'IandC-4930.jpg',
 ];
 
 const PastEvents: React.FC = () => {
@@ -96,11 +96,11 @@ const PastEvents: React.FC = () => {
             {images2025.map((img) => (
               <img
                 key={img}
-                src={`/rueckblick_content/pictures/I&C 2025/${img}`}
-                alt="Vergangenes I&C Event 2025"
+                src={`/rueckblick_content/pictures/IandC_2025/${img}`}
+                alt="Vergangenes IandC Event 2025"
                 className="rounded-xl shadow-md object-cover w-full mb-8 bg-slate-800 cursor-pointer hover:scale-105 transition-transform duration-200"
                 loading="lazy"
-                onClick={() => openLightbox(`/I&C 2025/${img}`)}
+                onClick={() => openLightbox(`/IandC_2025/${img}`)}
               />
             ))}
           </Masonry>
@@ -113,11 +113,11 @@ const PastEvents: React.FC = () => {
             {images2024.map((img) => (
               <img
                 key={img}
-                src={`/rueckblick_content/pictures/I&C 2024/${img}`}
-                alt="Vergangenes I&C Event 2024"
+                src={`/rueckblick_content/pictures/IandC_2024/${img}`}
+                alt="Vergangenes IandC Event 2024"
                 className="rounded-xl shadow-md object-cover w-full mb-8 bg-slate-800 cursor-pointer hover:scale-105 transition-transform duration-200"
                 loading="lazy"
-                onClick={() => openLightbox(`/I&C 2024/${img}`)}
+                onClick={() => openLightbox(`/IandC_2024/${img}`)}
               />
             ))}
           </Masonry>
@@ -135,7 +135,7 @@ const PastEvents: React.FC = () => {
             >
               <img
                 src={`/rueckblick_content/pictures${selectedImg}`}
-                alt="Vergangenes I&C Event groß"
+                alt="Vergangenes IandC Event groß"
                 className="rounded-xl shadow-2xl w-auto h-auto object-contain"
                 style={{ maxWidth: '100%', maxHeight: '100%' }}
               />
