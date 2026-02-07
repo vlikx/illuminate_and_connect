@@ -37,14 +37,28 @@ const Hero: React.FC<HeroProps> = ({ onScrollToForm }) => {
 
         {/* Info Pills */}
         <div className="flex flex-col md:flex-row items-center justify-center gap-6 text-slate-200 mt-4">
-          <div className="flex items-center gap-3 bg-white/5 px-6 py-3 rounded-xl border border-white/10 hover:border-fuchsia-500/50 transition-colors backdrop-blur-sm">
+          <div
+            className="flex items-center gap-3 bg-white/5 px-6 py-3 rounded-xl border border-white/10 hover:border-fuchsia-500/50 transition-colors backdrop-blur-sm cursor-pointer"
+            onClick={() => {
+              const el = document.getElementById('anfahrt-parken');
+              if (el) el.scrollIntoView({ behavior: 'smooth' });
+            }}
+            title="Zu Anfahrt & Parken scrollen"
+          >
             <Calendar className="w-5 h-5 text-fuchsia-400" />
             <div className="flex flex-col items-start leading-tight">
               <span className="font-bold text-white uppercase tracking-wide">Do, 16.04.</span>
               <span className="text-xs opacity-70">Abends</span>
             </div>
           </div>
-          <div className="flex items-center gap-3 bg-white/5 px-6 py-3 rounded-xl border border-white/10 hover:border-yellow-500/50 transition-colors backdrop-blur-sm">
+          <div
+            className="flex items-center gap-3 bg-white/5 px-6 py-3 rounded-xl border border-white/10 hover:border-yellow-500/50 transition-colors backdrop-blur-sm cursor-pointer"
+            onClick={() => {
+              const el = document.getElementById('anfahrt-parken');
+              if (el) el.scrollIntoView({ behavior: 'smooth' });
+            }}
+            title="Zur Anfahrt & Parken"
+          >
             <MapPin className="w-5 h-5 text-yellow-400" />
             <div className="flex flex-col items-start leading-tight">
               <span className="font-bold text-white uppercase tracking-wide">DIS: Digital Innovation Space</span>
@@ -52,16 +66,25 @@ const Hero: React.FC<HeroProps> = ({ onScrollToForm }) => {
             </div>
           </div>
         </div>
-
-        <div className="pt-8">
-          <button 
-            onClick={onScrollToForm}
-            className="group relative inline-flex items-center gap-3 px-10 py-5 bg-gradient-to-r from-fuchsia-600 to-pink-600 text-white rounded-full font-bold uppercase tracking-wider hover:from-fuchsia-500 hover:to-pink-500 transition-all duration-300 hover:scale-105 shadow-[0_0_30px_rgba(236,72,153,0.4)]"
+        {/* Vergangene Events Kachel */}
+        <div className="flex flex-col md:flex-row items-center justify-center gap-6 text-slate-200 mt-2">
+          <a
+            href="/past-events"
+            className="flex items-center gap-3 bg-white/5 px-6 py-3 rounded-xl border border-white/10 hover:border-fuchsia-500/50 transition-colors backdrop-blur-sm cursor-pointer w-full md:w-auto max-w-xs font-bold text-fuchsia-300 hover:text-yellow-400 uppercase tracking-wide shadow-[0_0_15px_rgba(217,70,239,0.10)]"
+            title="Vergangene Events ansehen"
+            style={{ minWidth: '220px', justifyContent: 'center' }}
           >
-            Jetzt Anmelden
-            <ArrowDown className="w-5 h-5 group-hover:translate-y-1 transition-transform" />
-          </button>
+            <span className="flex items-center gap-3">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5 text-fuchsia-400">
+                <rect x="3" y="3" width="18" height="14" rx="2" />
+                <circle cx="8.5" cy="8.5" r="1.5" />
+                <path d="M21 17l-5-5a2 2 0 0 0-2.8 0l-5.2 5.2" />
+              </svg>
+              <span className="whitespace-nowrap text-white">Vergangene Events ansehen</span>
+            </span>
+          </a>
         </div>
+
       </div>
     </section>
   );
