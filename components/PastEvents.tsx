@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import Masonry from 'react-masonry-css';
+import FloatingButton from './FloatingButton';
 
 const images2024 = [
   'Peter_Munz_11_von_33.jpg',
@@ -82,7 +83,7 @@ const PastEvents: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-black text-white py-16 px-4">
-      <div className="w-full px-2 md:px-8 mx-auto">
+      <div className="px-2 md:px-8 mx-auto">
         <h1 className="text-4xl md:text-5xl font-bold mb-8 font-[Rajdhani] uppercase tracking-wide text-center bg-gradient-to-r from-fuchsia-400 to-yellow-400 bg-clip-text text-transparent whitespace-nowrap">
           Vergangene Illuminate & Connect Events
         </h1>
@@ -174,6 +175,7 @@ const PastEvents: React.FC = () => {
             `}</style>
           </div>
         )}
+      <FloatingButton />
       </div>
     </div>
   );
