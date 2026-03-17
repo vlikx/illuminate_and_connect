@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Illuminate &amp; Connect – Hero Poster</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Tailwind for quick layout utilities -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Rajdhani:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        width: 100%;
+      }
+
+      body {
+        font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", sans-serif;
+        background-color: #000;
+        color: #f8fafc;
+        overflow: hidden;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        font-family: "Rajdhani", sans-serif;
+      }
+
+      /* Match existing neon styles */
+      .neon-outline-pink {
+        color: transparent;
+        -webkit-text-stroke: 2px #d946ef;
+        text-shadow: 0 0 25px rgba(217, 70, 239, 0.6);
+      }
+
+      .neon-outline-yellow {
+        color: transparent;
+        -webkit-text-stroke: 2px #facc15;
+        text-shadow: 0 0 25px rgba(250, 204, 21, 0.6);
+      }
+
+      /* Floating bokeh animation */
+      @keyframes float {
+        0%,
+        100% {
+          transform: translate(0, 0);
+        }
+        50% {
+          transform: translate(-10px, -20px);
+        }
+      }
+
+      .animate-float {
+        animation: float 6s ease-in-out infinite;
+      }
+
+      .animate-float-delayed {
+        animation: float 8s ease-in-out infinite;
+        animation-delay: 2s;
+      }
+
+      /* Simple fade-in for main content */
+      @keyframes fade-in-up {
+        0% {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .animate-fade-in-up {
+        animation: fade-in-up 1.2s ease-out both;
+      }
+
+      /* Print: A1 page, full-bleed hero */
+      @page {
+        size: A1;
+        margin: 0;
+      }
+
+      @media print {
+        html,
+        body {
+          height: 100%;
+          width: 100%;
+        }
+
+        body {
+          overflow: hidden;
+          background: #000;
+        }
+
+        .screen-only {
+          display: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="min-h-screen bg-black text-slate-50 selection:bg-fuchsia-500/30 font-sans">
+      <!-- Stars / Noise Background (copied from App) -->
+      <div class="fixed inset-0 z-0 pointer-events-none">
+        <div class="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-15 brightness-100 contrast-150 mix-blend-overlay"></div>
+        <div
+          class="absolute inset-0 opacity-50"
+          style="
+            background-image:
+              radial-gradient(1px 1px at 20px 30px, #fff, rgba(0,0,0,0)),
+              radial-gradient(1px 1px at 40px 70px, #fff, rgba(0,0,0,0)),
+              radial-gradient(2px 2px at 90px 40px, #fff, rgba(0,0,0,0)),
+              radial-gradient(1px 1px at 160px 120px, #fff, rgba(0,0,0,0));
+            background-size: 300px 300px;
+          "
+        ></div>
+      </div>
+
+      <div class="relative z-10">
+        <!-- Hero section only (no navigation, no Anmeldung / Sponsoring CTAs) -->
+        <section
+          class="relative min-h-screen flex flex-col items-center justify-center overflow-hidden px-4 py-20"
+        >
+      <!-- Background bokeh circles -->
+      <div
+        class="absolute top-1/4 left-1/4 w-64 h-64 bg-fuchsia-600/20 rounded-full blur-[80px] -z-10 animate-float"
+      ></div>
+      <div
+        class="absolute bottom-1/4 right-1/4 w-80 h-80 bg-yellow-500/10 rounded-full blur-[80px] -z-10 animate-float-delayed"
+      ></div>
+      <div
+        class="absolute top-10 right-10 w-32 h-32 bg-fuchsia-500/20 rounded-full blur-[40px] -z-10"
+      ></div>
+      <div
+        class="absolute bottom-10 left-10 w-40 h-40 bg-yellow-600/20 rounded-full blur-[50px] -z-10"
+      ></div>
+
+      <div
+        class="max-w-5xl w-full text-center space-y-8 z-10 animate-fade-in-up flex flex-col items-center"
+      >
+        <!-- Save the Date Badge -->
+        <div
+          class="inline-flex items-center space-x-2 bg-black/40 backdrop-blur-md border border-fuchsia-500/30 rounded-full px-5 py-2 text-fuchsia-200 text-sm font-semibold tracking-wide shadow-[0_0_15px_rgba(217,70,239,0.2)]"
+        >
+          <span class="relative flex h-2 w-2">
+            <span
+              class="animate-ping absolute inline-flex h-full w-full rounded-full bg-fuchsia-400 opacity-75"
+            ></span>
+            <span
+              class="relative inline-flex rounded-full h-2 w-2 bg-fuchsia-500"
+            ></span>
+          </span>
+          <span class="uppercase">Save the Date</span>
+        </div>
+
+        <!-- Main Title -->
+        <h1
+          class="text-4xl sm:text-6xl md:text-8xl lg:text-9xl font-bold tracking-tight leading-none flex flex-col gap-2"
+        >
+          <span class="neon-outline-pink font-[Rajdhani]">ILLUMINATE</span>
+          <span class="neon-outline-yellow font-[Rajdhani]">&amp; CONNECT</span>
+        </h1>
+
+        <p
+          class="text-base sm:text-lg md:text-2xl text-slate-300 max-w-2xl mx-auto font-light leading-relaxed font-sans"
+        >
+          Ein Abend, der zeigt, was
+          <span
+            class="text-white font-medium border-b border-yellow-500/50"
+            >Human Centricity</span
+          >
+          bewegt.
+        </p>
+
+        <!-- Info Pills (Date & Location) -->
+        <div
+          class="flex flex-col md:flex-row items-center justify-center gap-6 text-slate-200 mt-4"
+        >
+          <!-- Date pill with calendar icon -->
+          <div
+            class="flex items-center gap-3 bg-white/5 px-6 py-3 rounded-xl border border-white/10 hover:border-fuchsia-500/50 transition-colors backdrop-blur-sm cursor-pointer"
+          >
+            <div class="w-5 h-5 text-fuchsia-400 flex items-center justify-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="w-full h-full"
+              >
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                <line x1="16" y1="2" x2="16" y2="6" />
+                <line x1="8" y1="2" x2="8" y2="6" />
+                <line x1="3" y1="10" x2="21" y2="10" />
+              </svg>
+            </div>
+            <div class="flex flex-col items-start leading-tight">
+              <span
+                class="font-bold text-white uppercase tracking-wide"
+                >Do, 16.04.</span
+              >
+              <span class="text-xs text-white font-semibold">Einlass ab 17:30</span>
+            </div>
+          </div>
+
+          <!-- Location pill with map-pin icon -->
+          <div
+            class="flex items-center gap-3 bg-white/5 px-6 py-3 rounded-xl border border-white/10 hover:border-yellow-500/50 transition-colors backdrop-blur-sm cursor-pointer"
+          >
+            <div class="w-5 h-5 text-yellow-400 flex items-center justify-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="w-full h-full"
+              >
+                <path
+                  d="M21 10c0 5.25-6 11-9 11S3 15.25 3 10a9 9 0 1 1 18 0z"
+                />
+                <circle cx="12" cy="10" r="3" />
+              </svg>
+            </div>
+            <div class="flex flex-col items-start leading-tight text-left">
+              <span
+                class="font-bold text-white uppercase tracking-wide"
+                >DIS: Digital Innovation Space</span
+              >
+              <span class="text-xs text-white"
+                >Anton Huber Straße 4, 73430 Aalen</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+      </div>
+    </div>
+  </body>
+</html>
