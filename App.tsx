@@ -11,9 +11,9 @@ import CustomCursor from './components/CustomCursor';
 const Footer: React.FC = () => {
   return (
     <footer className="border-t border-white/10 bg-black/30 backdrop-blur-sm">
-      <div className="mx-auto flex max-w-7xl flex-col gap-3 px-6 py-6 text-sm text-slate-300 sm:flex-row sm:items-center sm:justify-between">
-        <p>Illuminate &amp; Connect</p>
-        <div className="flex items-center gap-5">
+      <div className="mx-auto flex max-w-7xl flex-row flex-wrap items-center justify-between gap-3 px-6 py-6 text-sm text-slate-300">
+        <p className="mr-4">Illuminate &amp; Connect</p>
+        <div className="flex flex-row items-center gap-5">
           <Link to="/impressum" className="transition-colors hover:text-fuchsia-300">
             Impressum
           </Link>
