@@ -50,7 +50,7 @@ const FloatingButton: React.FC<FloatingButtonProps> = ({ variant = 'floating' })
       <AnimatePresence initial={false} mode="wait">
         {isVisible && (
           <motion.a
-            href="https://www.hs-aalen.de/de/pages/b-sc-information-design_ic"
+            href="https://www.hs-aalen.de/aktuelles/veranstaltungen/veranstaltung/illuminate-connect/"
             target="_blank"
             rel="noopener noreferrer"
             className={isInline ? 'relative z-20 inline-flex' : 'fixed z-50'}
