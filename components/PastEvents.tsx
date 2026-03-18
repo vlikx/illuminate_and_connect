@@ -103,6 +103,9 @@ const PastEvents: React.FC = () => {
   const openLightbox = (img: string) => {
     setSelectedImg(img);
     setLightboxOpen(true);
+    if (window.innerWidth < 768) {
+      window.scrollTo({ top: 0, behavior: 'auto' });
+    }
   };
   const closeLightbox = () => {
     setLightboxOpen(false);

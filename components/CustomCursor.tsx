@@ -6,19 +6,28 @@ const CustomCursor: React.FC = () => {
 	const [hasMoved, setHasMoved] = useState(false);
 	const [isClicking, setIsClicking] = useState(false);
 	const [isPointer, setIsPointer] = useState(false);
+	const [isDesktop, setIsDesktop] = useState(true);
 
 	const springX = useSpring(0, { stiffness: 500, damping: 35, mass: 0.4 });
 	const springY = useSpring(0, { stiffness: 500, damping: 35, mass: 0.4 });
 
 	useEffect(() => {
+		const updateIsDesktop = () => {
+			setIsDesktop(window.innerWidth >= 768);
+		};
+		updateIsDesktop();
+		window.addEventListener('resize', updateIsDesktop);
+		return () => window.removeEventListener('resize', updateIsDesktop);
+	}, []);
+
+	useEffect(() => {
+		if (!isDesktop) return;
 		const isInteractiveTarget = (target: HTMLElement | null) => {
 			if (!target) return false;
-
 			const semanticTarget = target.closest(
 				'button, a, [role="button"], input[type="button"], input[type="submit"], [data-cursor="pointer"], .cursor-pointer'
 			);
 			if (semanticTarget) return true;
-
 			let current: HTMLElement | null = target;
 			while (current) {
 				const computedCursor = window.getComputedStyle(current).cursor;
@@ -27,43 +36,36 @@ const CustomCursor: React.FC = () => {
 				}
 				current = current.parentElement;
 			}
-
 			return false;
 		};
-
 		const handleMove = (event: MouseEvent) => {
 			const { clientX, clientY } = event;
 			setVisible(true);
 			setHasMoved(true);
 			springX.set(clientX);
 			springY.set(clientY);
-
 			const target = event.target as HTMLElement | null;
 			setIsPointer(isInteractiveTarget(target));
 		};
-
 		const handleLeave = () => {
 			setVisible(false);
 			setIsPointer(false);
 		};
-
 		const handleDown = () => setIsClicking(true);
 		const handleUp = () => setIsClicking(false);
-
 		window.addEventListener('mousemove', handleMove);
 		window.addEventListener('mouseleave', handleLeave);
 		window.addEventListener('mousedown', handleDown);
 		window.addEventListener('mouseup', handleUp);
-
 		return () => {
 			window.removeEventListener('mousemove', handleMove);
 			window.removeEventListener('mouseleave', handleLeave);
 			window.removeEventListener('mousedown', handleDown);
 			window.removeEventListener('mouseup', handleUp);
 		};
-	}, [springX, springY]);
+	}, [springX, springY, isDesktop]);
 
-	if (!visible || !hasMoved) {
+	if (!isDesktop || !visible || !hasMoved) {
 		return null;
 	}
 

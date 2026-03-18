@@ -3,8 +3,28 @@ import { Routes, Route, Link } from 'react-router-dom';
 import Hero from './components/Hero';
 import InfoSection from './components/InfoSection';
 import PastEvents from './components/PastEvents';
+import Imprint from './components/Imprint';
+import PrivacyPolicy from './components/PrivacyPolicy';
 import BackToTopButton from './components/BackToTopButton';
 import CustomCursor from './components/CustomCursor';
+
+const Footer: React.FC = () => {
+  return (
+    <footer className="border-t border-white/10 bg-black/30 backdrop-blur-sm">
+      <div className="mx-auto flex max-w-7xl flex-col gap-3 px-6 py-6 text-sm text-slate-300 sm:flex-row sm:items-center sm:justify-between">
+        <p>Illuminate &amp; Connect</p>
+        <div className="flex items-center gap-5">
+          <Link to="/impressum" className="transition-colors hover:text-fuchsia-300">
+            Impressum
+          </Link>
+          <Link to="/datenschutz" className="transition-colors hover:text-fuchsia-300">
+            Datenschutz
+          </Link>
+        </div>
+      </div>
+    </footer>
+  );
+};
 
 const App: React.FC = () => {
   return (
@@ -42,7 +62,10 @@ const App: React.FC = () => {
               </>
             } />
             <Route path="/past-events" element={<PastEvents />} />
+            <Route path="/impressum" element={<Imprint />} />
+            <Route path="/datenschutz" element={<PrivacyPolicy />} />
           </Routes>
+          <Footer />
         </div>
       </div>
       <BackToTopButton />
