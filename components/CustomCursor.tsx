@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { motion, useSpring } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 const CustomCursor: React.FC = () => {
 	const [visible, setVisible] = useState(false);
@@ -7,9 +7,7 @@ const CustomCursor: React.FC = () => {
 	const [isClicking, setIsClicking] = useState(false);
 	const [isPointer, setIsPointer] = useState(false);
 	const [isDesktop, setIsDesktop] = useState(true);
-
-	const springX = useSpring(0, { stiffness: 500, damping: 35, mass: 0.4 });
-	const springY = useSpring(0, { stiffness: 500, damping: 35, mass: 0.4 });
+	const [pos, setPos] = useState({ x: 0, y: 0 });
 
 	useEffect(() => {
 		const updateIsDesktop = () => {
@@ -42,8 +40,7 @@ const CustomCursor: React.FC = () => {
 			const { clientX, clientY } = event;
 			setVisible(true);
 			setHasMoved(true);
-			springX.set(clientX);
-			springY.set(clientY);
+			setPos({ x: clientX, y: clientY });
 			const target = event.target as HTMLElement | null;
 			setIsPointer(isInteractiveTarget(target));
 		};
@@ -63,7 +60,7 @@ const CustomCursor: React.FC = () => {
 			window.removeEventListener('mousedown', handleDown);
 			window.removeEventListener('mouseup', handleUp);
 		};
-	}, [springX, springY, isDesktop]);
+	}, [isDesktop]);
 
 	if (!isDesktop || !visible || !hasMoved) {
 		return null;
@@ -75,8 +72,8 @@ const CustomCursor: React.FC = () => {
 				className="absolute"
 				animate={{ scale: isClicking ? 0.9 : isPointer ? 1.08 : 1 }}
 				style={{
-					left: springX,
-					top: springY,
+					left: pos.x,
+					top: pos.y,
 					width: 26,
 					height: 26,
 					transform: 'translate(-50%, -50%)',

@@ -1,5 +1,5 @@
-import React from 'react';
-import { Routes, Route, Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import Hero from './components/Hero';
 import InfoSection from './components/InfoSection';
 import PastEvents from './components/PastEvents';
@@ -11,13 +11,24 @@ import CustomCursor from './components/CustomCursor';
 const Footer: React.FC = () => {
   return (
     <footer className="border-t border-white/10 bg-black/30 backdrop-blur-sm">
-      <div className="mx-auto flex max-w-7xl flex-row flex-wrap items-center justify-between gap-3 px-6 py-6 text-sm text-slate-300">
-        <p className="mr-4">Illuminate &amp; Connect</p>
-        <div className="flex flex-row items-center gap-5">
-          <Link to="/impressum" className="transition-colors hover:text-fuchsia-300">
+      <div className="mx-auto max-w-7xl px-6 py-6 text-sm text-slate-300 flex flex-row flex-wrap items-center justify-between gap-3">
+        <div className="flex-1 min-w-0">
+          <span className="font-semibold whitespace-nowrap">Illuminate &amp; Connect</span>
+        </div>
+        <div className="flex-1 min-w-0 text-center">
+          <span className="inline-block whitespace-nowrap">
+            Lust auf ein Sponsoring? Schreib uns einfach an: <a
+              href="mailto:inf_illuminate_and_connect@outlook.com"
+              className="text-fuchsia-300 underline hover:text-yellow-300 transition-colors whitespace-nowrap"
+              title="inf_illuminate_and_connect@outlook.com"
+            >inf_illuminate_and_connect@outlook.com</a>
+          </span>
+        </div>
+        <div className="flex-1 min-w-0 flex flex-row items-center justify-end gap-5">
+          <Link to="/impressum" className="transition-colors hover:text-fuchsia-300 whitespace-nowrap">
             Impressum
           </Link>
-          <Link to="/datenschutz" className="transition-colors hover:text-fuchsia-300">
+          <Link to="/datenschutz" className="transition-colors hover:text-fuchsia-300 whitespace-nowrap">
             Datenschutz
           </Link>
         </div>
@@ -27,6 +38,10 @@ const Footer: React.FC = () => {
 };
 
 const App: React.FC = () => {
+  const location = useLocation();
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  }, [location.pathname]);
   return (
     <>
       <CustomCursor />
