@@ -144,7 +144,7 @@ const PastEvents: React.FC = () => {
       <div className="px-2 md:px-8 mx-auto">
         <div className="mt-8 md:mt-12">
           <Masonry
-            breakpointCols={{ default: 4, 1100: 3, 700: 2, 0: 2 }}
+            breakpointCols={{ default: 4, 1100: 3, 700: 2, 500: 2, 0: 2 }}
             className="flex w-full mb-12 gap-8 masonry-grid"
             columnClassName="masonry-column"
           >
