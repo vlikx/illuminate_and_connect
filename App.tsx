@@ -10,7 +10,7 @@ import CustomCursor from './components/CustomCursor';
 
 const Footer: React.FC = () => {
   return (
-    <footer className="border-t border-white/10 bg-black/30 backdrop-blur-sm">
+    <footer>
       <div className="mx-auto max-w-7xl px-6 py-6 text-sm text-slate-300 flex flex-row flex-wrap items-center justify-between gap-3 footer-mobile-stack">
         <div className="flex-1 min-w-0">
           <span className="font-semibold whitespace-nowrap">Illuminate &amp; Connect</span>

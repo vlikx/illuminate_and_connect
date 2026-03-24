@@ -60,8 +60,8 @@ const Hero: React.FC<HeroProps> = ({ onScrollToForm }) => {
             >
               <Calendar className="w-5 h-5 text-fuchsia-400" />
               <div className="flex flex-col items-start leading-tight">
-                <span className="font-bold text-white uppercase tracking-wide">Do, 16.04.</span>
-                <span className="text-xs text-white font-semibold">Einlass ab 17:30</span>
+                <span className="font-bold text-white uppercase tracking-wide">Donnerstag, 16.04.</span>
+                <span className="text-xs text-white font-semibold">Einlass ab 17:30 – Beginn 18:00 Uhr</span>
               </div>
             </div>
             <div
