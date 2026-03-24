@@ -1,3 +1,19 @@
+@media (max-width: 700px) {
+	footer .footer-mobile-stack {
+		flex-direction: column !important;
+		align-items: flex-start !important;
+		text-align: left !important;
+		gap: 12px !important;
+		padding-top: 22px !important;
+		padding-bottom: 22px !important;
+	}
+	footer .footer-mobile-stack > div {
+		width: 100% !important;
+		min-width: 0 !important;
+		justify-content: flex-start !important;
+		text-align: left !important;
+	}
+}
 /* Prevent horizontal scroll on mobile */
 html, body {
 	max-width: 100vw;
