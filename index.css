@@ -1,4 +1,13 @@
 @media (max-width: 700px) {
+	footer .footer-mobile-stack .footer-email-wrap {
+		white-space: normal !important;
+		word-break: break-all !important;
+		width: 100% !important;
+		display: block !important;
+		text-align: left !important;
+	}
+}
+@media (max-width: 700px) {
 	footer .footer-mobile-stack {
 		flex-direction: column !important;
 		align-items: flex-start !important;
@@ -22,14 +31,14 @@ html, body {
 /* Masonry grid custom styles for PastEvents */
 .masonry-grid {
 	display: flex;
-	margin-left: -12px; /* gutter size offset */
+	margin-left: -18px; /* increased gutter size offset */
 }
 .masonry-column {
-	padding-left: 12px; /* gutter size */
+	padding-left: 18px; /* increased gutter size */
 	background-clip: padding-box;
 }
 .masonry-column > div {
-	margin-bottom: 12px;
+	margin-bottom: 22px; /* increased vertical gap */
 }
 /* Langsame Puls-Animation für Floating Button */
 @keyframes pulse-slow {

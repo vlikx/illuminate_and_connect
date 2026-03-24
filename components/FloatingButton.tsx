@@ -96,7 +96,7 @@ const FloatingButton: React.FC<FloatingButtonProps> = ({ variant = 'floating' })
       }
       @media (max-width: 640px) {
         a[aria-label="Jetzt zur Anmeldung für Illuminate & Connect"][data-button-variant="floating"] {
-          bottom: 56px !important;
+          bottom: 80px !important; /* Align with BackToTopButton */
           right: 16px !important;
         }
         a[aria-label="Jetzt zur Anmeldung für Illuminate & Connect"][data-button-variant="floating"] span {
@@ -112,7 +112,7 @@ const FloatingButton: React.FC<FloatingButtonProps> = ({ variant = 'floating' })
       }
       @media (min-width: 641px) {
         a[aria-label="Jetzt zur Anmeldung für Illuminate & Connect"][data-button-variant="floating"] {
-          bottom: 80px !important;
+          bottom: 96px !important; /* Align with BackToTopButton (md:bottom-24 = 96px) */
           right: 48px !important;
         }
       }

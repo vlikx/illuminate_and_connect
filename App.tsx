@@ -16,19 +16,29 @@ const Footer: React.FC = () => {
           <span className="font-semibold whitespace-nowrap">Illuminate &amp; Connect</span>
         </div>
         <div className="flex-1 min-w-0 text-center">
-          <span className="inline-block whitespace-nowrap">
+          <span className="inline-block footer-email-wrap">
             Lust auf ein Sponsoring? Schreib uns einfach an: <a
               href="mailto:inf_illuminate_and_connect@outlook.com"
-              className="text-fuchsia-300 underline hover:text-yellow-300 transition-colors whitespace-nowrap"
+              className="text-sm font-semibold text-yellow-300 hover:text-fuchsia-300 transition-colors underline underline-offset-4"
               title="inf_illuminate_and_connect@outlook.com"
             >inf_illuminate_and_connect@outlook.com</a>
           </span>
         </div>
         <div className="flex-1 min-w-0 flex flex-row items-center justify-end gap-5">
-          <Link to="/impressum" className="transition-colors hover:text-fuchsia-300 whitespace-nowrap">
+          <Link
+            to="/impressum"
+            className="text-sm font-semibold text-slate-300 hover:text-yellow-300 transition-colors whitespace-nowrap no-underline"
+            title="Impressum"
+            style={{ textDecoration: 'none' }}
+          >
             Impressum
           </Link>
-          <Link to="/datenschutz" className="transition-colors hover:text-fuchsia-300 whitespace-nowrap">
+          <Link
+            to="/datenschutz"
+            className="text-sm font-semibold text-slate-300 hover:text-yellow-300 transition-colors whitespace-nowrap no-underline"
+            title="Datenschutz"
+            style={{ textDecoration: 'none' }}
+          >
             Datenschutz
           </Link>
         </div>
