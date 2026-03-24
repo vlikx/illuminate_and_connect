@@ -133,24 +133,13 @@ const PastEvents: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-black text-white px-4 pt-32 pb-16 relative overflow-hidden">
-      {/* Hero-style animated background, noise overlay, and DIS.jpg image */}
+      {/* Hero-style animated background and noise overlay */}
       <div className="fixed inset-0 z-0 pointer-events-none">
         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-15 brightness-100 contrast-150 mix-blend-overlay"></div>
         <div className="absolute inset-0 opacity-50" style={{
           backgroundImage: "radial-gradient(1px 1px at 20px 30px, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 40px 70px, #fff, rgba(0,0,0,0)), radial-gradient(2px 2px at 90px 40px, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 160px 120px, #fff, rgba(0,0,0,0))",
           backgroundSize: '300px 300px'
         }}></div>
-        {/* DIS.jpg background image with reduced opacity */}
-        <div className="absolute inset-0 z-0" style={{
-          backgroundImage: "url('/DIS.jpg')",
-          backgroundRepeat: 'no-repeat',
-          backgroundPosition: 'center 60%',
-          backgroundSize: '70vw auto',
-          opacity: 0.13,
-          maxWidth: '1200px',
-          margin: '0 auto',
-          pointerEvents: 'none',
-        }} />
         <div className="absolute top-1/2 left-0 w-96 h-96 bg-fuchsia-900/10 rounded-full blur-[100px] -z-10 animate-float" />
         <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-yellow-500/10 rounded-full blur-[80px] -z-10 animate-float-delayed" />
         <div className="absolute top-10 right-10 w-32 h-32 bg-fuchsia-500/20 rounded-full blur-[40px] -z-10" />
