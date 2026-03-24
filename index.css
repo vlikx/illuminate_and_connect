@@ -1,3 +1,15 @@
+/* Masonry grid custom styles for PastEvents */
+.masonry-grid {
+	display: flex;
+	margin-left: -12px; /* gutter size offset */
+}
+.masonry-column {
+	padding-left: 12px; /* gutter size */
+	background-clip: padding-box;
+}
+.masonry-column > div {
+	margin-bottom: 12px;
+}
 /* Langsame Puls-Animation für Floating Button */
 @keyframes pulse-slow {
 	0%, 100% {
