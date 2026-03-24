@@ -100,15 +100,26 @@ const PastEvents: React.FC = () => {
     };
   }, [lightboxOpen]);
 
+  // Store scroll position for mobile fullscreen
+  const scrollPositionRef = React.useRef<number | null>(null);
+
   const openLightbox = (img: string) => {
     setSelectedImg(img);
     setLightboxOpen(true);
     if (window.innerWidth < 768) {
+      scrollPositionRef.current = window.scrollY;
       window.scrollTo({ top: 0, behavior: 'auto' });
     }
   };
   const closeLightbox = () => {
     setLightboxOpen(false);
+    // Restore scroll position on mobile only
+    if (window.innerWidth < 768 && scrollPositionRef.current !== null) {
+      setTimeout(() => {
+        window.scrollTo({ top: scrollPositionRef.current!, behavior: 'auto' });
+        scrollPositionRef.current = null;
+      }, 10); // Wait for modal to close
+    }
   };
 
   // Mix images from 2024 and 2025 so the gallery feels like one vernissage
