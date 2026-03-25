@@ -1,5 +1,7 @@
 
+
 import React, { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import Masonry from 'react-masonry-css';
 
@@ -69,6 +71,7 @@ const images2025 = [
 const PastEvents: React.FC = () => {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [selectedImg, setSelectedImg] = useState<string | null>(null);
+  const [currentIndex, setCurrentIndex] = useState<number>(-1);
 
   useEffect(() => {
     document.body.dataset.lightboxOpen = lightboxOpen ? 'true' : 'false';
@@ -90,6 +93,10 @@ const PastEvents: React.FC = () => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         closeLightbox();
+      } else if (event.key === 'ArrowLeft') {
+        goToPrev();
+      } else if (event.key === 'ArrowRight') {
+        goToNext();
       }
     };
 
@@ -98,13 +105,15 @@ const PastEvents: React.FC = () => {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [lightboxOpen]);
+  }, [lightboxOpen, currentIndex]);
 
   // Store scroll position for mobile fullscreen
   const scrollPositionRef = React.useRef<number | null>(null);
 
   const openLightbox = (img: string) => {
     setSelectedImg(img);
+    const idx = mixedImages.findIndex(item => `/rueckblick_content/pictures/${item.file}` === img);
+    setCurrentIndex(idx);
     setLightboxOpen(true);
     if (window.innerWidth < 768) {
       scrollPositionRef.current = window.scrollY;
@@ -113,12 +122,30 @@ const PastEvents: React.FC = () => {
   };
   const closeLightbox = () => {
     setLightboxOpen(false);
+    setCurrentIndex(-1);
+    setSelectedImg(null);
     // Restore scroll position on mobile only
     if (window.innerWidth < 768 && scrollPositionRef.current !== null) {
       setTimeout(() => {
         window.scrollTo({ top: scrollPositionRef.current!, behavior: 'auto' });
         scrollPositionRef.current = null;
       }, 10); // Wait for modal to close
+    }
+  };
+
+  const goToPrev = () => {
+    if (currentIndex > 0) {
+      const prevIdx = currentIndex - 1;
+      setCurrentIndex(prevIdx);
+      setSelectedImg(`/rueckblick_content/pictures/${mixedImages[prevIdx].file}`);
+    }
+  };
+
+  const goToNext = () => {
+    if (currentIndex < mixedImages.length - 1) {
+      const nextIdx = currentIndex + 1;
+      setCurrentIndex(nextIdx);
+      setSelectedImg(`/rueckblick_content/pictures/${mixedImages[nextIdx].file}`);
     }
   };
 
@@ -205,7 +232,8 @@ const PastEvents: React.FC = () => {
         <AnimatePresence onExitComplete={() => setSelectedImg(null)}>
           {lightboxOpen && selectedImg && (
             <motion.div
-              className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm"
+              className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm pointer-events-auto"
+              style={{ pointerEvents: 'auto' }}
               onClick={closeLightbox}
               role="dialog"
               aria-modal="true"
@@ -215,6 +243,43 @@ const PastEvents: React.FC = () => {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.28, ease: 'easeOut' }}
             >
+              {/* Arrows are now siblings to modal content, not inside animated content */}
+              {currentIndex > 0 && (
+                <button
+                  className="fixed left-6 top-1/2 -translate-y-1/2 z-[201] flex items-center justify-center w-12 h-12 rounded-full bg-black/90 border border-white/60 hover:border-fuchsia-400/80 shadow-2xl transition-colors duration-200 cursor-pointer pointer-events-auto"
+                  style={{ zIndex: 201, background: 'rgba(0,0,0,0.92)' }}
+                  onClick={e => { e.stopPropagation(); goToPrev(); }}
+                  aria-label="Vorheriges Bild"
+                >
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="url(#arrow-left-gradient)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="drop-shadow-[0_0_8px_rgba(217,70,239,0.7)]">
+                    <defs>
+                      <linearGradient id="arrow-left-gradient" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+                        <stop stopColor="#f0abfc" />
+                        <stop offset="1" stopColor="#fde047" />
+                      </linearGradient>
+                    </defs>
+                    <polyline points="15 18 9 12 15 6" />
+                  </svg>
+                </button>
+              )}
+              {currentIndex < mixedImages.length - 1 && (
+                <button
+                  className="fixed right-6 top-1/2 -translate-y-1/2 z-[201] flex items-center justify-center w-12 h-12 rounded-full bg-black/90 border border-white/60 hover:border-fuchsia-400/80 shadow-2xl transition-colors duration-200 cursor-pointer pointer-events-auto"
+                  style={{ zIndex: 201, background: 'rgba(0,0,0,0.92)' }}
+                  onClick={e => { e.stopPropagation(); goToNext(); }}
+                  aria-label="Nächstes Bild"
+                >
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="url(#arrow-right-gradient)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="drop-shadow-[0_0_8px_rgba(250,204,21,0.7)]">
+                    <defs>
+                      <linearGradient id="arrow-right-gradient" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+                        <stop stopColor="#f0abfc" />
+                        <stop offset="1" stopColor="#fde047" />
+                      </linearGradient>
+                    </defs>
+                    <polyline points="9 18 15 12 9 6" />
+                  </svg>
+                </button>
+              )}
               <motion.div
                 className="w-full px-4 flex justify-center"
                 initial={{ opacity: 0, y: 20 }}
@@ -235,48 +300,54 @@ const PastEvents: React.FC = () => {
                     alt="Vergangenes IandC Event groß"
                     className="block w-auto max-w-full h-auto max-h-[80vh] object-contain rounded-2xl shadow-2xl"
                   />
-                  <motion.button
-                    className="absolute top-3 right-3 md:top-4 md:right-4 flex items-center justify-center w-10 h-10 rounded-full bg-black/70 border border-white/30 hover:border-fuchsia-400/70 shadow-lg transition-colors duration-200"
-                    onClick={closeLightbox}
-                    aria-label="Schließen"
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.9 }}
-                    transition={{ duration: 0.2, delay: 0.08 }}
-                    whileHover={{ scale: 1.06 }}
-                    whileTap={{ scale: 0.96 }}
-                  >
-                    <span className="flex items-center justify-center w-full h-full leading-none">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="url(#x-gradient)"
-                        strokeWidth="2.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className="w-7 h-7"
-                      >
-                        <defs>
-                          <linearGradient
-                            id="x-gradient"
-                            x1="0"
-                            y1="0"
-                            x2="24"
-                            y2="24"
-                            gradientUnits="userSpaceOnUse"
-                          >
-                            <stop stopColor="#f0abfc" />
-                            <stop offset="1" stopColor="#fde047" />
-                          </linearGradient>
-                        </defs>
-                        <line x1="18" y1="6" x2="6" y2="18" />
-                        <line x1="6" y1="6" x2="18" y2="18" />
-                      </svg>
-                    </span>
-                  </motion.button>
                 </motion.div>
               </motion.div>
+              {/* Close button rendered in a React Portal for absolute top stacking and pointer events */}
+              {lightboxOpen && createPortal(
+                <motion.button
+                  className="fixed top-2 right-2 md:top-6 md:right-6 flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full bg-black/90 border border-white/60 hover:border-fuchsia-400/80 shadow-2xl transition-colors duration-200 z-[99999] cursor-pointer pointer-events-auto select-none"
+                  style={{ zIndex: 99999, background: 'rgba(0,0,0,0.92)', pointerEvents: 'auto', touchAction: 'manipulation' }}
+                  onClick={closeLightbox}
+                  aria-label="Schließen"
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  transition={{ duration: 0.2, delay: 0.08 }}
+                  whileHover={{ scale: 1.06 }}
+                  whileTap={{ scale: 0.96 }}
+                  tabIndex={0}
+                >
+                  <span className="flex items-center justify-center w-full h-full leading-none">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="url(#x-gradient)"
+                      strokeWidth="2.2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="w-6 h-6 md:w-7 md:h-7"
+                    >
+                      <defs>
+                        <linearGradient
+                          id="x-gradient"
+                          x1="0"
+                          y1="0"
+                          x2="24"
+                          y2="24"
+                          gradientUnits="userSpaceOnUse"
+                        >
+                          <stop stopColor="#f0abfc" />
+                          <stop offset="1" stopColor="#fde047" />
+                        </linearGradient>
+                      </defs>
+                      <line x1="18" y1="6" x2="6" y2="18" className="pointer-events-none" />
+                      <line x1="6" y1="6" x2="18" y2="18" className="pointer-events-none" />
+                    </svg>
+                  </span>
+                </motion.button>,
+                document.body
+              )}
             </motion.div>
           )}
         </AnimatePresence>

@@ -101,6 +101,8 @@ html, body {
 }
 
 /* Hide the native cursor only when custom cursor is active */
-.custom-cursor-active * {
-	cursor: none !important;
+@media (min-width: 640px) {
+	.custom-cursor-active * {
+		cursor: none !important;
+	}
 }
