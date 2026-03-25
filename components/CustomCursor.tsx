@@ -11,10 +11,6 @@ const CustomCursor: React.FC = () => {
 	const [isPointer, setIsPointer] = useState(false);
 	const [pos, setPos] = useState({ x: 0, y: 0 });
 	const [isTouchDevice, setIsTouchDevice] = useState(false);
-
-	// For smooth animation
-	const targetPos = useRef({ x: 0, y: 0 });
-	const rafRef = useRef<number | null>(null);
 	// Detect touch device (phones/tablets)
 	useEffect(() => {
 		const checkTouch = () => {
@@ -59,7 +55,7 @@ const CustomCursor: React.FC = () => {
 		};
 
 		const handleMove = (event: MouseEvent) => {
-			targetPos.current = { x: event.clientX, y: event.clientY };
+			setPos({ x: event.clientX, y: event.clientY });
 			setVisible(true);
 			setHasMoved(true);
 			const target = event.target as HTMLElement | null;
@@ -78,27 +74,11 @@ const CustomCursor: React.FC = () => {
 		window.addEventListener('mousedown', handleDown);
 		window.addEventListener('mouseup', handleUp);
 
-		// Animation loop for smooth cursor
-		const animate = () => {
-			setPos(prev => {
-				const dx = targetPos.current.x - prev.x;
-				const dy = targetPos.current.y - prev.y;
-				const speed = 0.22; // Lower = smoother
-				return {
-					x: prev.x + dx * speed,
-					y: prev.y + dy * speed,
-				};
-			});
-			rafRef.current = requestAnimationFrame(animate);
-		};
-		rafRef.current = requestAnimationFrame(animate);
-
 		return () => {
 			window.removeEventListener('mousemove', handleMove);
 			window.removeEventListener('mouseleave', handleLeave);
 			window.removeEventListener('mousedown', handleDown);
 			window.removeEventListener('mouseup', handleUp);
-			if (rafRef.current) cancelAnimationFrame(rafRef.current);
 		};
 	}, []);
 

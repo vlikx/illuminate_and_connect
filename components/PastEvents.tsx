@@ -107,30 +107,17 @@ const PastEvents: React.FC = () => {
     };
   }, [lightboxOpen, currentIndex]);
 
-  // Store scroll position for mobile fullscreen
-  const scrollPositionRef = React.useRef<number | null>(null);
-
+  // No scroll position manipulation: keep background position unchanged
   const openLightbox = (img: string) => {
     setSelectedImg(img);
     const idx = mixedImages.findIndex(item => `/rueckblick_content/pictures/${item.file}` === img);
     setCurrentIndex(idx);
     setLightboxOpen(true);
-    if (window.innerWidth < 768) {
-      scrollPositionRef.current = window.scrollY;
-      window.scrollTo({ top: 0, behavior: 'auto' });
-    }
   };
   const closeLightbox = () => {
     setLightboxOpen(false);
     setCurrentIndex(-1);
     setSelectedImg(null);
-    // Restore scroll position on mobile only
-    if (window.innerWidth < 768 && scrollPositionRef.current !== null) {
-      setTimeout(() => {
-        window.scrollTo({ top: scrollPositionRef.current!, behavior: 'auto' });
-        scrollPositionRef.current = null;
-      }, 10); // Wait for modal to close
-    }
   };
 
   const goToPrev = () => {
@@ -169,6 +156,38 @@ const PastEvents: React.FC = () => {
     []
   );
 
+  // Touch gesture state for swipe navigation
+  const touchStartX = React.useRef<number | null>(null);
+  const touchEndX = React.useRef<number | null>(null);
+
+  // Handle touch start
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchEndX.current = null;
+  };
+
+  // Handle touch move
+  const handleTouchMove = (e: React.TouchEvent) => {
+    touchEndX.current = e.touches[0].clientX;
+  };
+
+  // Handle touch end and determine swipe direction
+  const handleTouchEnd = () => {
+    if (touchStartX.current !== null && touchEndX.current !== null) {
+      const distance = touchStartX.current - touchEndX.current;
+      const minSwipeDistance = 40; // px
+      if (distance > minSwipeDistance) {
+        // Swiped left (next)
+        goToNext();
+      } else if (distance < -minSwipeDistance) {
+        // Swiped right (prev)
+        goToPrev();
+      }
+    }
+    touchStartX.current = null;
+    touchEndX.current = null;
+  };
+
   return (
     <div className="min-h-screen bg-black text-white px-4 pt-32 pb-16 relative overflow-hidden">
       {/* Hero-style animated background and noise overlay */}
@@ -201,9 +220,7 @@ const PastEvents: React.FC = () => {
             {mixedImages.map((item, index) => (
               <div
                 key={`${item.year}-${item.file}`}
-                className={`group relative mb-8 cursor-pointer transform transition-transform duration-300 ${
-                  index % 3 === 1 ? 'md:mt-6' : index % 3 === 2 ? 'md:-mt-4' : ''
-                } hover:scale-[1.015]`}
+                className="group relative mb-8 cursor-pointer transform transition-transform duration-300 hover:scale-[1.015]"
                 onClick={() => openLightbox(`/rueckblick_content/pictures/${item.file}`)}
               >
                 <div className="relative overflow-hidden rounded-[1.35rem] border border-white/10 bg-slate-900/60 shadow-lg backdrop-blur-sm transition-all duration-300 group-hover:border-fuchsia-400/30 group-hover:shadow-[0_18px_40px_rgba(2,6,23,0.78),0_0_20px_rgba(217,70,239,0.10)]">
@@ -242,6 +259,9 @@ const PastEvents: React.FC = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.28, ease: 'easeOut' }}
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
             >
               {/* Arrows are now siblings to modal content, not inside animated content */}
               {currentIndex > 0 && (
@@ -303,50 +323,57 @@ const PastEvents: React.FC = () => {
                 </motion.div>
               </motion.div>
               {/* Close button rendered in a React Portal for absolute top stacking and pointer events */}
-              {lightboxOpen && createPortal(
-                <motion.button
-                  className="fixed top-2 right-2 md:top-6 md:right-6 flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full bg-black/90 border border-white/60 hover:border-fuchsia-400/80 shadow-2xl transition-colors duration-200 z-[99999] cursor-pointer pointer-events-auto select-none"
-                  style={{ zIndex: 99999, background: 'rgba(0,0,0,0.92)', pointerEvents: 'auto', touchAction: 'manipulation' }}
-                  onClick={closeLightbox}
-                  aria-label="Schließen"
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  transition={{ duration: 0.2, delay: 0.08 }}
-                  whileHover={{ scale: 1.06 }}
-                  whileTap={{ scale: 0.96 }}
-                  tabIndex={0}
-                >
-                  <span className="flex items-center justify-center w-full h-full leading-none">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="url(#x-gradient)"
-                      strokeWidth="2.2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="w-6 h-6 md:w-7 md:h-7"
-                    >
-                      <defs>
-                        <linearGradient
-                          id="x-gradient"
-                          x1="0"
-                          y1="0"
-                          x2="24"
-                          y2="24"
-                          gradientUnits="userSpaceOnUse"
-                        >
-                          <stop stopColor="#f0abfc" />
-                          <stop offset="1" stopColor="#fde047" />
-                        </linearGradient>
-                      </defs>
-                      <line x1="18" y1="6" x2="6" y2="18" className="pointer-events-none" />
-                      <line x1="6" y1="6" x2="18" y2="18" className="pointer-events-none" />
-                    </svg>
-                  </span>
-                </motion.button>,
-                document.body
+              {lightboxOpen && selectedImg && (
+                <>
+                  {/* Responsive close button: always fixed and above all modal content */}
+                  <motion.button
+                    className="fixed top-4 right-4 md:top-6 md:right-6 w-12 h-12 rounded-full bg-black/90 border border-white/60 hover:border-fuchsia-400/80 shadow-2xl transition-colors duration-200 cursor-pointer pointer-events-auto select-none flex items-center justify-center z-[1000001]"
+                    style={{
+                      zIndex: 1000001,
+                      background: 'rgba(0,0,0,0.92)',
+                      pointerEvents: 'auto',
+                      touchAction: 'manipulation',
+                    }}
+                    onClick={closeLightbox}
+                    aria-label="Schließen"
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    transition={{ duration: 0.2, delay: 0.08 }}
+                    whileHover={{ scale: 1.06 }}
+                    whileTap={{ scale: 0.96 }}
+                    tabIndex={0}
+                  >
+                    <span className="flex items-center justify-center w-full h-full leading-none">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="url(#x-gradient)"
+                        strokeWidth="2.2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="w-7 h-7"
+                      >
+                        <defs>
+                          <linearGradient
+                            id="x-gradient"
+                            x1="0"
+                            y1="0"
+                            x2="24"
+                            y2="24"
+                            gradientUnits="userSpaceOnUse"
+                          >
+                            <stop stopColor="#f0abfc" />
+                            <stop offset="1" stopColor="#fde047" />
+                          </linearGradient>
+                        </defs>
+                        <line x1="18" y1="6" x2="6" y2="18" className="pointer-events-none" />
+                        <line x1="6" y1="6" x2="18" y2="18" className="pointer-events-none" />
+                      </svg>
+                    </span>
+                  </motion.button>
+                </>
               )}
             </motion.div>
           )}
