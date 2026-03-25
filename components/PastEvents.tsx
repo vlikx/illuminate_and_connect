@@ -323,13 +323,12 @@ const PastEvents: React.FC = () => {
                 </motion.div>
               </motion.div>
               {/* Close button rendered in a React Portal for absolute top stacking and pointer events */}
-              {lightboxOpen && selectedImg && (
-                <>
-                  {/* Responsive close button: always fixed and above all modal content */}
+              {lightboxOpen && selectedImg &&
+                createPortal(
                   <motion.button
-                    className="fixed top-4 right-4 md:top-6 md:right-6 w-12 h-12 rounded-full bg-black/90 border border-white/60 hover:border-fuchsia-400/80 shadow-2xl transition-colors duration-200 cursor-pointer pointer-events-auto select-none flex items-center justify-center z-[1000001]"
+                    className="fixed top-4 right-4 md:top-6 md:right-6 w-12 h-12 rounded-full bg-black/90 border border-white/60 hover:border-fuchsia-400/80 shadow-2xl transition-colors duration-200 cursor-pointer pointer-events-auto select-none flex items-center justify-center z-[2147483647]"
                     style={{
-                      zIndex: 1000001,
+                      zIndex: 2147483647,
                       background: 'rgba(0,0,0,0.92)',
                       pointerEvents: 'auto',
                       touchAction: 'manipulation',
@@ -372,9 +371,10 @@ const PastEvents: React.FC = () => {
                         <line x1="6" y1="6" x2="18" y2="18" className="pointer-events-none" />
                       </svg>
                     </span>
-                  </motion.button>
-                </>
-              )}
+                  </motion.button>,
+                  document.body
+                )
+              }
             </motion.div>
           )}
         </AnimatePresence>
