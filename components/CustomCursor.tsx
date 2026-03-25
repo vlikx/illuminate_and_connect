@@ -1,25 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 
+
 const CustomCursor: React.FC = () => {
 	const [visible, setVisible] = useState(false);
 	const [hasMoved, setHasMoved] = useState(false);
 	const [isClicking, setIsClicking] = useState(false);
 	const [isPointer, setIsPointer] = useState(false);
-	const [isDesktop, setIsDesktop] = useState(true);
 	const [pos, setPos] = useState({ x: 0, y: 0 });
 
+	// Add/remove class to body to hide native cursor only when custom cursor is visible
 	useEffect(() => {
-		const updateIsDesktop = () => {
-			setIsDesktop(window.innerWidth >= 768);
+		if (visible && hasMoved) {
+			document.body.classList.add('custom-cursor-active');
+		} else {
+			document.body.classList.remove('custom-cursor-active');
+		}
+		return () => {
+			document.body.classList.remove('custom-cursor-active');
 		};
-		updateIsDesktop();
-		window.addEventListener('resize', updateIsDesktop);
-		return () => window.removeEventListener('resize', updateIsDesktop);
-	}, []);
+	}, [visible, hasMoved]);
 
 	useEffect(() => {
-		if (!isDesktop) return;
 		const isInteractiveTarget = (target: HTMLElement | null) => {
 			if (!target) return false;
 			const semanticTarget = target.closest(
@@ -60,9 +62,9 @@ const CustomCursor: React.FC = () => {
 			window.removeEventListener('mousedown', handleDown);
 			window.removeEventListener('mouseup', handleUp);
 		};
-	}, [isDesktop]);
+	}, []);
 
-	if (!isDesktop || !visible || !hasMoved) {
+	if (!visible || !hasMoved) {
 		return null;
 	}
 

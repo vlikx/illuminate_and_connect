@@ -95,7 +95,7 @@ html, body {
 	}
 }
 
-/* Hide the native cursor everywhere so only the custom cursor is visible */
-* {
+/* Hide the native cursor only when custom cursor is active */
+.custom-cursor-active * {
 	cursor: none !important;
 }
