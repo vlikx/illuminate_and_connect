@@ -3,20 +3,34 @@ import { motion } from 'framer-motion';
 
 
 
+
 const CustomCursor: React.FC = () => {
 	const [visible, setVisible] = useState(false);
 	const [hasMoved, setHasMoved] = useState(false);
 	const [isClicking, setIsClicking] = useState(false);
 	const [isPointer, setIsPointer] = useState(false);
 	const [pos, setPos] = useState({ x: 0, y: 0 });
+	const [isTouchDevice, setIsTouchDevice] = useState(false);
 
 	// For smooth animation
 	const targetPos = useRef({ x: 0, y: 0 });
 	const rafRef = useRef<number | null>(null);
+	// Detect touch device (phones/tablets)
+	useEffect(() => {
+		const checkTouch = () => {
+			// Only hide on true mobile/tablet (no mouse hover capability)
+			setIsTouchDevice(
+				window.matchMedia && window.matchMedia('(hover: none) and (pointer: coarse)').matches
+			);
+		};
+		checkTouch();
+		window.addEventListener('resize', checkTouch);
+		return () => window.removeEventListener('resize', checkTouch);
+	}, []);
 
 	// Add/remove class to body to hide native cursor only when custom cursor is visible
 	useEffect(() => {
-		if (visible && hasMoved) {
+		if (!isTouchDevice && visible && hasMoved) {
 			document.body.classList.add('custom-cursor-active');
 		} else {
 			document.body.classList.remove('custom-cursor-active');
@@ -24,7 +38,7 @@ const CustomCursor: React.FC = () => {
 		return () => {
 			document.body.classList.remove('custom-cursor-active');
 		};
-	}, [visible, hasMoved]);
+	}, [visible, hasMoved, isTouchDevice]);
 
 	useEffect(() => {
 		const isInteractiveTarget = (target: HTMLElement | null) => {
@@ -88,7 +102,7 @@ const CustomCursor: React.FC = () => {
 		};
 	}, []);
 
-	if (!visible || !hasMoved) {
+	if (isTouchDevice || !visible || !hasMoved) {
 		return null;
 	}
 
