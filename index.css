@@ -1,3 +1,10 @@
+/* Ensure custom cursor is always above modal close button and all overlays */
+@media (min-width: 640px) {
+	.custom-cursor-absolute-zfix {
+		z-index: 2147483647 !important;
+		pointer-events: none !important;
+	}
+}
 /* Ensure headings use only Rajdhani to prevent font jump */
 h1, h2, h3, h4, h5, h6 {
 	font-family: 'Rajdhani', sans-serif !important;

@@ -326,9 +326,9 @@ const PastEvents: React.FC = () => {
               {lightboxOpen && selectedImg &&
                 createPortal(
                   <motion.button
-                    className="fixed top-4 right-4 md:top-6 md:right-6 w-12 h-12 rounded-full bg-black/90 border border-white/60 hover:border-fuchsia-400/80 shadow-2xl transition-colors duration-200 cursor-pointer pointer-events-auto select-none flex items-center justify-center z-[2147483647]"
+                    className="fixed top-4 right-4 md:top-6 md:right-6 w-12 h-12 rounded-full bg-black/90 border border-white/60 hover:border-fuchsia-400/80 shadow-2xl transition-colors duration-200 cursor-pointer pointer-events-auto select-none flex items-center justify-center z-[2147483646]"
                     style={{
-                      zIndex: 2147483647,
+                      zIndex: 2147483646,
                       background: 'rgba(0,0,0,0.92)',
                       pointerEvents: 'auto',
                       touchAction: 'manipulation',

@@ -86,8 +86,8 @@ const CustomCursor: React.FC = () => {
 		return null;
 	}
 
-	return (
-		<div className="pointer-events-none fixed inset-0 z-[100000]">
+		       return (
+			       <div className="pointer-events-none fixed inset-0 custom-cursor-absolute-zfix">
 			<motion.div
 				className="absolute"
 				animate={{ scale: isClicking ? 0.9 : isPointer ? 1.08 : 1 }}
