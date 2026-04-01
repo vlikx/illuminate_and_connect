@@ -4,13 +4,17 @@ import { motion } from 'framer-motion';
 
 
 
+
 const CustomCursor: React.FC = () => {
 	const [visible, setVisible] = useState(false);
 	const [hasMoved, setHasMoved] = useState(false);
 	const [isClicking, setIsClicking] = useState(false);
 	const [isPointer, setIsPointer] = useState(false);
-	const [pos, setPos] = useState({ x: 0, y: 0 });
 	const [isTouchDevice, setIsTouchDevice] = useState(false);
+	// Use refs for position to avoid re-rendering on every mousemove
+	const posRef = useRef({ x: 0, y: 0 });
+	const [renderPos, setRenderPos] = useState({ x: 0, y: 0 });
+	const rafRef = useRef<number | null>(null);
 	// Detect touch device (phones/tablets)
 	useEffect(() => {
 		const checkTouch = () => {
@@ -36,6 +40,7 @@ const CustomCursor: React.FC = () => {
 		};
 	}, [visible, hasMoved, isTouchDevice]);
 
+
 	useEffect(() => {
 		const isInteractiveTarget = (target: HTMLElement | null) => {
 			if (!target) return false;
@@ -54,12 +59,20 @@ const CustomCursor: React.FC = () => {
 			return false;
 		};
 
+		// Only update state for pointer/click/visibility, not position
 		const handleMove = (event: MouseEvent) => {
-			setPos({ x: event.clientX, y: event.clientY });
+			posRef.current = { x: event.clientX, y: event.clientY };
 			setVisible(true);
 			setHasMoved(true);
 			const target = event.target as HTMLElement | null;
 			setIsPointer(isInteractiveTarget(target));
+			// Schedule a render update via RAF if not already scheduled
+			if (rafRef.current === null) {
+				rafRef.current = window.requestAnimationFrame(() => {
+					setRenderPos({ ...posRef.current });
+					rafRef.current = null;
+				});
+			}
 		};
 
 		const handleLeave = () => {
@@ -79,6 +92,10 @@ const CustomCursor: React.FC = () => {
 			window.removeEventListener('mouseleave', handleLeave);
 			window.removeEventListener('mousedown', handleDown);
 			window.removeEventListener('mouseup', handleUp);
+			if (rafRef.current !== null) {
+				window.cancelAnimationFrame(rafRef.current);
+				rafRef.current = null;
+			}
 		};
 	}, []);
 
@@ -86,14 +103,14 @@ const CustomCursor: React.FC = () => {
 		return null;
 	}
 
-		       return (
-			       <div className="pointer-events-none fixed inset-0 custom-cursor-absolute-zfix">
+	return (
+		<div className="pointer-events-none fixed inset-0 custom-cursor-absolute-zfix">
 			<motion.div
 				className="absolute"
 				animate={{ scale: isClicking ? 0.9 : isPointer ? 1.08 : 1 }}
 				style={{
-					left: pos.x,
-					top: pos.y,
+					left: renderPos.x,
+					top: renderPos.y,
 					width: 26,
 					height: 26,
 					transform: 'translate(-50%, -50%)',
